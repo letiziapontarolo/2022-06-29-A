@@ -35,7 +35,7 @@ public class FXMLController {
     private Button btnPercorso; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbA1"
-    private ComboBox<?> cmbA1; // Value injected by FXMLLoader
+    private ComboBox<String> cmbA1; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbA2"
     private ComboBox<?> cmbA2; // Value injected by FXMLLoader
@@ -52,6 +52,10 @@ public class FXMLController {
     @FXML
     void doCalcolaAdiacenze(ActionEvent event) {
     	
+    	txtResult.clear();
+    	String str = cmbA1.getSelectionModel().getSelectedItem();
+    	txtResult.appendText(this.model.componenteConnessa(str));
+    	
     }
 
     @FXML
@@ -61,6 +65,31 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	
+    	cmbA1.getItems().clear();
+    	txtResult.clear();
+    	String input = txtN.getText();
+    	 int nInserito = 0;
+
+    	 if (input == "") {
+    	 txtResult.setText("numero di tracce inserito non valido.");
+    	 return;
+    	 }
+    	 try {
+    		 nInserito = Integer.parseInt(input);
+
+    	 } catch (NumberFormatException e) {
+    	 e.printStackTrace();
+    	 return;
+    	}
+    	 
+    	 this.model.creaGrafo(nInserito);
+    	 
+    	 txtResult.appendText("Grafo creato!\n");
+    	 txtResult.appendText("#VERTICI: " + this.model.numeroVertici() + "\n");
+    	 txtResult.appendText("#ARCHI: " + this.model.numeroArchi() + "\n");
+    	 cmbA1.getItems().addAll(this.model.listaAlbum());
+
     	
     }
 

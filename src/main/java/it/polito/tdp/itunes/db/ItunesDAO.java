@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
 import it.polito.tdp.itunes.model.Album;
 import it.polito.tdp.itunes.model.Artist;
 import it.polito.tdp.itunes.model.Genre;
@@ -15,6 +17,36 @@ import it.polito.tdp.itunes.model.Playlist;
 import it.polito.tdp.itunes.model.Track;
 
 public class ItunesDAO {
+	
+	public void riempiMappa(int tracce, Map<Integer, Album> idMap) {
+		
+		String sql = "SELECT al.*, COUNT(tr.TrackId) AS tracce "
+				+ "FROM album al, track tr "
+				+ "WHERE al.AlbumId = tr.AlbumId "
+				+ "GROUP BY al.AlbumId "
+				+ "HAVING tracce > ?";
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, tracce);
+			ResultSet res = st.executeQuery();
+			
+			while (res.next()) {
+				
+				Album a = new Album(res.getInt("AlbumId"), res.getString("Title"));
+				a.setTracce(res.getInt("tracce"));
+				idMap.put(res.getInt("AlbumId"), a);
+
+			}
+			conn.close();
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException("SQL Error");
+		}
+		
+	}
 	
 	public List<Album> getAllAlbums(){
 		final String sql = "SELECT * FROM Album";
