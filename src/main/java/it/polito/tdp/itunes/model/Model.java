@@ -37,7 +37,7 @@ public class Model {
 		Graphs.addAllVertices(this.grafo, idMap.values());
 		for (Album a1 : idMap.values()) {
 			for (Album a2 : idMap.values()) {
-				if (a1.getAlbumId() != a2.getAlbumId()) {
+				if (a1.getAlbumId() > a2.getAlbumId()) {
 					if ((a1.getTracce() - a2.getTracce()) != 0) {
 						if (a1.getTracce() < a2.getTracce()) {
 							Graphs.addEdge(this.grafo, a1, a2, Math.abs(a1.getTracce() - a2.getTracce()));
@@ -88,7 +88,7 @@ public class Model {
 						
 					}
 					}
-				a1.setBilancio((sommaArchiEntranti - sommaArchiUscenti)/2);
+				a1.setBilancio((sommaArchiEntranti - sommaArchiUscenti));
 
 		}
 		
